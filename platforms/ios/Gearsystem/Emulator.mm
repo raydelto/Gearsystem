@@ -27,6 +27,7 @@ const float kGB_TexWidth = kGB_Width / 256.0f;
 const float kGB_TexHeight = kGB_Height / 256.0f;
 const GLfloat box[] = {0.0f, kGB_Height, 1.0f, kGB_Width,kGB_Height, 1.0f, 0.0f, 0.0f, 1.0f, kGB_Width, 0.0f, 1.0f};
 const GLfloat tex[] = {0.0f, kGB_TexHeight, kGB_TexWidth, kGB_TexHeight, 0.0f, 0.0f, kGB_TexWidth, 0.0f};
+const char* kSaveFolder = "/var/mobile/Library/Gearsystem";
 
 @implementation Emulator
 
@@ -42,6 +43,13 @@ const GLfloat tex[] = {0.0f, kGB_TexHeight, kGB_TexWidth, kGB_TexHeight, 0.0f, 0
         SDL_SetMainReady();
 #endif
 #endif
+        NSDictionary *attrib = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:0777], NSFilePosixPermissions, nil];
+        NSString *savePath = [NSString stringWithUTF8String:kSaveFolder];
+        
+        if (![[NSFileManager defaultManager] fileExistsAtPath:savePath])
+        {
+            [[NSFileManager defaultManager] createDirectoryAtPath:savePath withIntermediateDirectories:YES attributes:attrib error:NULL];
+        }
         
         theGearsystemCore = new GearsystemCore();
         theGearsystemCore->Init();
@@ -76,7 +84,7 @@ const GLfloat tex[] = {0.0f, kGB_TexHeight, kGB_TexWidth, kGB_TexHeight, 0.0f, 0
 
 -(void)dealloc
 {
-    theGearsystemCore->SaveRam();
+    theGearsystemCore->SaveRam(kSaveFolder);
     SafeDeleteArray(theTexture);
     SafeDeleteArray(theFrameBuffer);
     SafeDelete(theGearsystemCore);
@@ -157,9 +165,9 @@ const GLfloat tex[] = {0.0f, kGB_TexHeight, kGB_TexWidth, kGB_TexHeight, 0.0f, 0
 
 -(void)loadRomWithPath: (NSString *)filePath
 {
-    theGearsystemCore->SaveRam();
+    theGearsystemCore->SaveRam(kSaveFolder);
     theGearsystemCore->LoadROM([filePath UTF8String]);
-    theGearsystemCore->LoadRam();
+    theGearsystemCore->LoadRam(kSaveFolder);
 }
 
 -(void)keyPressed: (GS_Keys)key
@@ -189,14 +197,14 @@ const GLfloat tex[] = {0.0f, kGB_TexHeight, kGB_TexWidth, kGB_TexHeight, 0.0f, 0
 
 -(void)reset
 {
-    theGearsystemCore->SaveRam();
+    theGearsystemCore->SaveRam(kSaveFolder);
     theGearsystemCore->ResetROM();
-    theGearsystemCore->LoadRam();
+    theGearsystemCore->LoadRam(kSaveFolder);
 }
 
 -(void)save
 {
-    theGearsystemCore->SaveRam();
+    theGearsystemCore->SaveRam(kSaveFolder);
 }
 
 - (void)setAudio: (BOOL)enabled

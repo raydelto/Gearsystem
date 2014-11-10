@@ -58,20 +58,14 @@
 
 - (void)reloadTableView
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    
     NSArray *files = nil;
+    NSFileManager *fileManager = [[NSFileManager alloc] init];
+    NSArray *dirContents = [fileManager contentsOfDirectoryAtPath:@"/var/mobile/Media/ROMs/Gearsystem" error:nil];
     
-    if ([paths count] > 0)
+    if ([dirContents count] > 0)
     {
-        NSFileManager *fileManager = [[NSFileManager alloc] init];
-        NSArray *dirContents = [fileManager contentsOfDirectoryAtPath:[paths objectAtIndex:0] error:nil];
-        
-        if ([dirContents count] > 0)
-        {
-            NSArray *extensions = [NSArray arrayWithObjects:@"zip", @"gb", @"sgb", @"gbc", @"rom", @"dmg", @"cgb", @"ZIP", @"GB", @"SGB", @"GBC", @"ROM", @"DMG", @"CGB", nil];
-            files = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
-        }
+        NSArray *extensions = [NSArray arrayWithObjects:@"zip", @"sms", @"gg", @"ZIP", @"SMS", @"GG", @"rom", @"ROM", nil];
+        files = [dirContents filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", extensions]];
     }
     
     self.sections = [[NSMutableDictionary alloc] init];
@@ -200,11 +194,10 @@
     {
         NSString* rom = [[self.sections valueForKey:[[[self.sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] objectAtIndex:indexPath.section]] objectAtIndex:indexPath.row];
         
-        NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         NSError* error;
         NSFileManager *fileManager = [[NSFileManager alloc] init];
         
-        NSString* deletePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, rom];
+        NSString* deletePath = [NSString stringWithFormat:@"%@/%@", @"/var/mobile/Media/ROMs/Gearsystem", rom];
         
         if ([fileManager removeItemAtPath:deletePath error:&error])
         {
