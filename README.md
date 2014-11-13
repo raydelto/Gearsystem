@@ -39,20 +39,20 @@ Features
 Compiling Instructions
 ----------------------
 
-The best way of compiling Gearsystem is by using one of the IDE projects provided for each platform.
+The best way of compiling Gearboy is by using one of the IDE projects provided for each platform.
 
-For all desktop platforms you will need SDL and Qt Framework SDKs installed and configured. 
-
-There is a nice Netbeans + Qt tutorial [here](http://netbeans.org/kb/docs/cnd/qt-applications.html).
+For all desktop platforms you will need SDL 2 and Qt 5 SDKs installed and configured.
 
 ### iOS
 - Install Xcode for Mac OS X. You need iOS SDK 8 or later. 
 - Build the project. 
-- Run it on real hardware using your iOS developer certificate. Be sure to compile it on Release for extra optimizations. For jailbroken devices use the jailbreak branch.
+- Run it on real hardware using your iOS developer certificate. Make sure it compiles on Release for extra optimizations.
+- For jailbroken devices use the jailbreak branch.
 
 ### Raspberry Pi - Raspbian
 - Install and configure [SDL 2](http://www.libsdl.org/download-2.0.php) for development.
 - Use <code>make</code> to build the project.
+- Sound emulation in the Pi is awfully slow. Use <code>export SDL_AUDIODRIVER=ALSA</code> before running the emulator and over clock your Raspberry as much as you can for the best performance.
  
 ### Windows
 - You need Visual Studio 2010 (Express Edition will do but you won't be able to install the Qt Add-in).
@@ -66,7 +66,7 @@ There is a nice Netbeans + Qt tutorial [here](http://netbeans.org/kb/docs/cnd/qt
 - You need Qt Creator, included in the Qt 5 SDK.
 - Install Xcode and run <code>xcode-select --install</code> in the terminal for the compiler to be available on the command line.
 - Install the [Qt 5 SDK for Mac OS](http://qt-project.org/downloads).
-- Download [SDL 2](http://www.libsdl.org/download-2.0.php) source code. Then run <code>.configure</code> <code>make</code> <code>sudo make install</code> on the terminal.
+- Download [SDL 2](http://www.libsdl.org/download-2.0.php) source code. Then run this three commands <code>.configure</code> <code>make</code> <code>sudo make install</code> on the terminal.
 - Open the Gearboy Qt project and build.
 
 ### Linux
