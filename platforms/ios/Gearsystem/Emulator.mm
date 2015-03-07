@@ -93,6 +93,7 @@ const char* kSaveFolder = "/var/mobile/Library/Gearsystem";
 
 -(void)shutdownGL
 {
+    TextureManager::Instance().UnloadAll();
     glDeleteTextures(1, &GBTexture);
 }
 
@@ -133,6 +134,22 @@ const char* kSaveFolder = "/var/mobile/Library/Gearsystem";
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, GBTexture);
     [self setupTextureWithData: (GLvoid*) theTexture];
+    
+    switch (_scanlines)
+    {
+        case 2:
+            scanlineTexture = TextureManager::Instance().GetTexture("/scanlines2x");
+            break;
+        case 3:
+            scanlineTexture = TextureManager::Instance().GetTexture("/scanlines3x");
+            break;
+        case 4:
+            scanlineTexture = TextureManager::Instance().GetTexture("/scanlines4x");
+            break;
+        default:
+            scanlineTexture = NULL;
+            break;
+    }
 }
 
 -(void)renderFrame
@@ -140,6 +157,29 @@ const char* kSaveFolder = "/var/mobile/Library/Gearsystem";
     glBindTexture(GL_TEXTURE_2D, GBTexture);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 256, 256, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*) theTexture);
     [self renderQuadWithViewportWidth:(128 * multiplier) andHeight:(112 * multiplier) andMirrorY:NO];
+    
+    glBindTexture(GL_TEXTURE_2D, scanlineTexture->GetID());
+    glEnable(GL_BLEND);
+    switch (_scanlines)
+    {
+        case 2:
+            glColor4f(1.0f, 1.0f, 1.0f, 0.35f);
+            break;
+        case 3:
+            glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
+            break;
+        case 4:
+            glColor4f(1.0f, 1.0f, 1.0f, 0.25f);
+            break;
+        default:
+            scanlineTexture = NULL;
+            break;
+    }
+    
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    [self renderQuadWithViewportWidth:(128 * multiplier) andHeight:(112 * multiplier) andMirrorY:NO];
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glDisable(GL_BLEND);
 }
 
 -(void)setupTextureWithData: (GLvoid*) data
