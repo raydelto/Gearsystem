@@ -33,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     qApp->installEventFilter(this);
     m_bFullscreen = false;
-    m_bPaused = false;
     m_iScreenSize = 2;
 
     m_bMenuPressed[0] = m_bMenuPressed[1] = m_bMenuPressed[2] = false;
@@ -109,11 +108,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::Pause()
 {
-  if(m_bPaused)
+  if(m_pEmulator->IsPaused())
     m_pEmulator->Resume();
   else
     m_pEmulator->Pause();
-  m_bPaused = !m_bPaused;  
 }
 
 

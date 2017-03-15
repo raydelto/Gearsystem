@@ -95,7 +95,6 @@ private:
     bool m_bMenuPressed[3];
     int m_iScreenSize;
     bool m_bFullscreen;
-    bool m_bPaused;
     QShortcut* m_pPauseShortcut;
     InputSettings* m_pInputSettings;
     SoundSettings* m_pSoundSettings;
