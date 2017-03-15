@@ -13,8 +13,8 @@
  * GNU General Public License for more details.
 
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see http://www.gnu.org/licenses/ 
- * 
+ * along with this program.  If not, see http://www.gnu.org/licenses/
+ *
  */
 
 #ifndef MAINWINDOW_H
@@ -50,6 +50,7 @@ public:
 
 public slots:
     void Exit();
+    void Pause();
     void MenuGameBoyLoadROM();
     void MenuGameBoyPause();
     void MenuGameBoyReset();
@@ -94,7 +95,8 @@ private:
     bool m_bMenuPressed[3];
     int m_iScreenSize;
     bool m_bFullscreen;
-    QShortcut* m_pExitShortcut;
+    bool m_bPaused;
+    QShortcut* m_pPauseShortcut;
     InputSettings* m_pInputSettings;
     SoundSettings* m_pSoundSettings;
     VideoSettings* m_pVideoSettings;

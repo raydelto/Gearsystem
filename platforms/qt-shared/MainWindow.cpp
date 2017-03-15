@@ -13,8 +13,8 @@
  * GNU General Public License for more details.
 
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see http://www.gnu.org/licenses/ 
- * 
+ * along with this program.  If not, see http://www.gnu.org/licenses/
+ *
  */
 
 #include <QFileDialog>
@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     qApp->installEventFilter(this);
     m_bFullscreen = false;
+    m_bPaused = false;
     m_iScreenSize = 2;
 
     m_bMenuPressed[0] = m_bMenuPressed[1] = m_bMenuPressed[2] = false;
@@ -44,12 +45,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->addAction(m_pUI->actionPause);
     this->addAction(m_pUI->actionSave_State);
     this->addAction(m_pUI->actionLoad_State);
-    
+
     this->setWindowTitle(GEARSYSTEM_TITLE);
 
-    m_pExitShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), this);
-    m_pExitShortcut->setContext(Qt::ApplicationShortcut);
-    QObject::connect(m_pExitShortcut, SIGNAL(activated()), this, SLOT(Exit()));
+    m_pPauseShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), this);
+    m_pPauseShortcut->setContext(Qt::ApplicationShortcut);
+    QObject::connect(m_pPauseShortcut, SIGNAL(activated()), this, SLOT(Pause()));
 
 
     QObject::connect(m_pUI->menuGame_Boy, SIGNAL(aboutToShow()), this, SLOT(MenuGameBoyPressed()));
@@ -98,13 +99,23 @@ MainWindow::~MainWindow()
     SaveSettings();
 
     SafeDelete(m_pAbout);
-    SafeDelete(m_pExitShortcut);
+    SafeDelete(m_pPauseShortcut);
     SafeDelete(m_pEmulator);
     SafeDelete(m_pGLFrame);
     SafeDelete(m_pInputSettings);
     SafeDelete(m_pSoundSettings);
     SafeDelete(m_pUI);
 }
+
+void MainWindow::Pause()
+{
+  if(m_bPaused)
+    m_pEmulator->Resume();
+  else
+    m_pEmulator->Pause();
+  m_bPaused = !m_bPaused;  
+}
+
 
 void MainWindow::Exit()
 {
@@ -502,4 +513,3 @@ void MainWindow::SaveSettings()
 
     m_pEmulator->SaveRam();
 }
-
